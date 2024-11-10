@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Responsif</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .calculator {
+            width: 100%;
+            max-width: 300px;
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+        .display {
+            font-size: 2em;
+            padding: 10px;
+            background-color: #444;
+            text-align: right;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .button {
+            padding: 20px;
+            background-color: #666;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            text-align: center;
+        }
+        .button.green {
+            background-color: #4caf50;
+        }
+        .button.red {
+            background-color: #f44336;
+        }
+        .button.equal {
+            background-color: #2196f3;
+            grid-column: span 2;
+        }
+        /* Responsive font-size */
+        @media (max-width: 400px) {
+            .display {
+                font-size: 1.5em;
+            }
+            .button {
+                padding: 15px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display" id="display"></div>
+        <div class="buttons">
+            <button class="button red" onclick="clearDisplay()">C</button>
+            <button class="button green" onclick="addTextToDisplay('(')">(</button>
+            <button class="button green" onclick="addTextToDisplay('%')">%</button>
+            <button class="button green" onclick="addTextToDisplay('÷')">÷</button>
+            <button class="button" onclick="addTextToDisplay('7')">7</button>
+            <button class="button" onclick="addTextToDisplay('8')">8</button>
+            <button class="button" onclick="addTextToDisplay('9')">9</button>
+            <button class="button green" onclick="addTextToDisplay('×')">×</button>
+            <button class="button" onclick="addTextToDisplay('4')">4</button>
+            <button class="button" onclick="addTextToDisplay('5')">5</button>
+            <button class="button" onclick="addTextToDisplay('6')">6</button>
+            <button class="button green" onclick="addTextToDisplay('-')">-</button>
+            <button class="button" onclick="addTextToDisplay('1')">1</button>
+            <button class="button" onclick="addTextToDisplay('2')">2</button>
+            <button class="button" onclick="addTextToDisplay('3')">3</button>
+            <button class="button green" onclick="addTextToDisplay('+')">+</button>
+            <button class="button" onclick="addTextToDisplay('0')">0</button>
+            <button class="button equal" onclick="calculate()">=</button>
+        </div>
+    </div>
+
+    <script>
+        const display = document.getElementById('display');
+
+        function addTextToDisplay(text) {
+            if (text === '×' || text === '÷' || text === '+' || text === '-' || text === '%') {
+                display.textContent += ` ${text} `;
+            } else {
+                display.textContent += text;
+            }
+            adjustFontSize();
+        }
+
+        function calculate() {
+            try {
+                let expression = display.textContent
+                    .replace(/×/g, '*')
+                    .replace(/÷/g, '/')
+                    .replace(/%/g, '/100');
+
+                let result = eval(expression);
+                display.textContent = formatNumber(result);
+            } catch {
+                display.textContent = 'Error';
+            }
+            adjustFontSize();
+        }
+
+        function clearDisplay() {
+            display.textContent = '';
+            adjustFontSize();
+        }
+
+        function formatNumber(num) {
+            return num.toLocaleString('en-US').replace(/,/g, '.');
+        }
+
+        function adjustFontSize() {
+            const length = display.textContent.length;
+            if (length > 20) {
+                display.style.fontSize = '1em';
+            } else if (length > 15) {
+                display.style.fontSize = '1.5em';
+            } else {
+                display.style.fontSize = '2em';
+            }
+        }
+    </script>
+</body>
+</html>
